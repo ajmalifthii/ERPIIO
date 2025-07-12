@@ -37,4 +37,52 @@ export const InventoryPage = () => {
   };
 
   // ... rest of the component
+
+  const columns = [
+    { accessor: 'name', Header: 'Name' },
+    { accessor: 'quantity', Header: 'Quantity' },
+    { accessor: 'purchase_price', Header: 'Purchase Price' },
+    { accessor: 'sale_price', Header: 'Sale Price' },
+    { accessor: 'status', Header: 'Status', Cell: ({ value }: { value: string }) => <StatusBadge status={value} /> },
+    {
+      id: 'actions',
+      Header: 'Actions',
+      Cell: ({ row }: any) => (
+        <div className="flex space-x-2">
+          <button onClick={() => setItemToEdit(row.original)} className="text-blue-500 hover:text-blue-700">
+            <Edit size={18} />
+          </button>
+          <button onClick={() => handleDelete(row.original.id)} className="text-red-500 hover:text-red-700">
+            <Trash2 size={18} />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  if (loading) return <div className="p-4">Loading inventory...</div>;
+  if (error) return <div className="p-4 text-red-500">Error loading inventory: {error}</div>;
+
+  return (
+    <div className="p-4 space-y-4">
+      <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">Inventory Management</h1>
+
+      <FormCard title={itemToEdit ? "Edit Item" : "Add New Item"} onClear={() => setItemToEdit(null)}>
+        <InventoryForm
+          itemToEdit={itemToEdit}
+          onSuccess={() => {
+            fetchInventory();
+            setItemToEdit(null);
+          }}
+        />
+      </FormCard>
+
+      <DataTable
+        columns={columns}
+        data={inventory}
+        filterGlobal={true}
+        filterPlaceholder="Search inventory..."
+      />
+    </div>
+  );
 };

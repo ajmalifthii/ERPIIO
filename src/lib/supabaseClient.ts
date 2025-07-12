@@ -1,6 +1,18 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://jnustvbeuqxfrtxodkwi.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpudXN0dmJldXF4ZnJ0eG9ka3dpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMzMyNjYsImV4cCI6MjA2NzYwOTI2Nn0.uGWW38cj1gdeiHx6sfdKpVP-z5zcR4oiI3WX23m45IQ'
+// Get Supabase URL and Anon Key from environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    'Supabase URL or Anon Key is missing. Make sure to set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file.'
+  );
+  // You might want to throw an error here or handle this case more gracefully
+  // depending on how you want your application to behave if credentials are missing.
+}
+
+// Initialize Supabase client
+// The assertion ! is used because we've checked above, but for robustness,
+// you might handle the case where they are still undefined more directly.
+export const supabase = createClient(supabaseUrl!, supabaseAnonKey!);

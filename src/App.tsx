@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import {
-  Home, FileText, CreditCard, Package, Calculator, Users, ShoppingCart, Repeat, Bell, BarChart3,
-  UserCheck, Menu, X, ChevronLeft, Search, Sun, Moon, LogOut, Printer, ClipboardList, Landmark, Library
-} from 'lucide-react';
+  Home, FileText, CreditCard, Package, Calculator, Users, ShoppingCart, Repeat, BarChart3,
+  UserCheck, X, ChevronLeft, Printer, ClipboardList, Landmark, Library
+} from 'lucide-react'; // Removed Bell, Menu, Search, Sun, Moon, LogOut
 import { Toaster } from 'react-hot-toast';
 
 import { DashboardPage } from './pages/DashboardPage';
@@ -20,17 +20,17 @@ import { QuotationsPage } from './pages/QuotationsPage';
 import { BankAccountsPage } from './pages/BankAccountsPage';
 import { BankReconciliationPage } from './pages/BankReconciliationPage';
 import { RecurringExpensesPage } from './pages/RecurringExpensesPage';
-import { commonClasses } from './lib/commonClasses';
-import { supabase } from './lib/supabaseClient';
+// import { commonClasses } from './lib/commonClasses'; // Removed commonClasses
+// import { supabase } from './lib/supabaseClient'; // supabase is not used directly in this file after removing handleLogout
 import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
   const { session, profile, loading } = useAuth();
-  const [isDarkMode, setIsDarkMode] = useState(() => {
+  const [isDarkMode, /* setIsDarkMode */] = useState(() => { // setIsDarkMode is not used
     if (typeof window !== 'undefined') {
       return localStorage.getItem('isDarkMode') === 'true';
     }
-    return true;
+    return true; // Default to true (dark mode) if localStorage is not available or not set
   });
   const [activeView, setActiveView] = useState('dashboard');
   const [activeTab, setActiveTab] = useState('home');
@@ -43,11 +43,11 @@ const App = () => {
     setShowMobileSidebar(false);
   };
 
-  const toggleDarkMode = () => setIsDarkMode(prev => {
-    const newState = !prev;
-    localStorage.setItem('isDarkMode', String(newState));
-    return newState;
-  });
+  // const toggleDarkMode = () => setIsDarkMode(prev => { // Removed toggleDarkMode function
+  //   const newState = !prev;
+  //   localStorage.setItem('isDarkMode', String(newState));
+  //   return newState;
+  // });
 
   const toggleSidebarCollapse = () => setIsSidebarCollapsed(!isSidebarCollapsed);
 
@@ -80,7 +80,7 @@ const App = () => {
 
   const navItems = allNavItems.filter(item => profile?.role && item.roles.includes(profile.role));
 
-  const handleLogout = async () => await supabase.auth.signOut();
+  // const handleLogout = async () => await supabase.auth.signOut(); // Removed handleLogout
   
   if (!session) return <LoginPage />;
   if (activeView === 'pos') return <POSPage />;
@@ -112,7 +112,7 @@ const App = () => {
     }
   };
   
-  const userInitial = profile?.email?.substring(0, 2)?.toUpperCase() || '??';
+  // const userInitial = profile?.email?.substring(0, 2)?.toUpperCase() || '??'; // Removed userInitial
 
   return (
     <>
